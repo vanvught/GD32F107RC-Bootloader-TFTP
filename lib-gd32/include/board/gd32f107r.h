@@ -94,7 +94,7 @@
  * I2C
  */
 
-// #define I2C0_REMAP
+#define I2C0_REMAP
 #if defined (I2C0_REMAP)
 # define I2C_REMAP			GPIO_I2C0_REMAP
 #endif
@@ -140,6 +140,8 @@
 
 #include "mcu/gd32f10x_mcu.h"
 #include "gd32_gpio.h"
+
+#define GD32_MCU_NAME			"GD32F107R"
 
 #define GD32_BOARD_NAME			"GD32F107R"
 #define GD32_BOARD_LED1			GD32_PORT_TO_GPIO(GD32_GPIO_PORTC, 0)

@@ -47,4 +47,6 @@
 # Build
 */build_gd32/*
 */lib_gd32/*
+
 *.bin
+

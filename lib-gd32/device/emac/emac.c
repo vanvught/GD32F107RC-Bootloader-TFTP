@@ -40,6 +40,8 @@ extern enet_descriptors_struct  *dma_current_rxdesc;
 
 static __IO uint32_t enet_init_status = 0;
 
+extern void mac_address_get(uint8_t paddr[]);
+
 static void enet_gpio_config(void) {
 	DEBUG_ENTRY
 
@@ -135,19 +137,7 @@ int emac_start(uint8_t mac_address[]) {
 
 	enet_system_setup();
 
-	const uint32_t mac_lo = *(volatile uint32_t *)(0x1FFFF7EC);
-	const uint32_t mac_hi = *(volatile uint32_t *)(0x1FFFF7F0);
-
-	mac_address[0] = 2;
-	mac_address[1] = (mac_lo >> 8) & 0xff;
-	mac_address[2] = (mac_lo >> 16) & 0xff;
-	mac_address[3] = (mac_lo >> 24) & 0xff;
-	mac_address[4] = (mac_hi >> 0) & 0xff;
-	mac_address[5] = (mac_hi >> 8) & 0xff;
-
-#ifndef NDEBUG
-	printf("%02x:%02x:%02x:%02x:%02x:%02x\n", mac_address[0], mac_address[1], mac_address[2], mac_address[3], mac_address[4], mac_address[5]);
-#endif
+	mac_address_get(mac_address);
 
 	enet_mac_address_set(ENET_MAC_ADDRESS0, mac_address);
 

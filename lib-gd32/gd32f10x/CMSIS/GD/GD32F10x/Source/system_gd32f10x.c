@@ -190,7 +190,7 @@ void SystemInit(void)
 
     /* Configure the System clock source, PLL Multiplier, AHB/APBx prescalers and Flash settings */
     system_clock_config();
-
+    
     /* BEGIN AvV */
 //#ifdef VECT_TAB_SRAM
 //    nvic_vector_table_set(NVIC_VECTTAB_RAM, VECT_TAB_OFFSET);

@@ -44,6 +44,7 @@
 #include "debug.h"
 
 extern "C" {
+void console_init(void);
 void systick_config(void);
 }
 
@@ -61,7 +62,7 @@ Hardware::Hardware() {
     gpio_init(LED_BLINK_GPIO_PORT, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, LED_BLINK_PIN);
     GPIO_BC(LED_BLINK_GPIO_PORT) = LED_BLINK_PIN;
 
-	uart0_init();
+	console_init();
     systick_config();
     udelay_init();
     micros_init();
