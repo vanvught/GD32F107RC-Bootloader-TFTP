@@ -37,15 +37,13 @@ File: `gd32f107rc_flash.ld`
 
 File: `spiflashinstall.h`
 
-	#elif defined (GD32)
-	# define OFFSET_UIMAGE		0x007000		// 28K
-
 	# if defined (BOARD_GD32F107R)
+	#  define OFFSET_UIMAGE		0x007000		// 28K
 	#  define FIRMWARE_MAX_SIZE (74 * 1024)		// 74K
 
 The 1K difference is needed for other `new` (`malloc`) within the bootloader.
 
-The change to be made in your application is in the file `gd32f107rc_flash.ld`. 
+The change to be made in your build configuration is in the file `gd32f107rc_flash.ld`. 
 
 	/* Specify the memory areas */
 	MEMORY

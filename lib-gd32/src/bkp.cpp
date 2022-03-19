@@ -1,5 +1,5 @@
 /**
- * @file software_version.h
+ * @file bkp.cpp
  *
  */
 /* Copyright (C) 2022 by Arjan van Vught mailto:info@gd32-dmx.org
@@ -23,9 +23,18 @@
  * THE SOFTWARE.
  */
 
-#ifndef SOFTWARE_VERSION_H_
-#define SOFTWARE_VERSION_H_
+#include "gd32.h"
 
-constexpr char SOFTWARE_VERSION[] = "1.0";
-
-#endif /* SOFTWARE_VERSION_H_ */
+#if defined (GD32F4XX)
+void bkp_data_write(bkp_data_register_enum register_number, uint16_t data) {
+	if ((register_number >= BKP_DATA_0) && (register_number <= BKP_DATA_1)) {
+		 REG16((BKPSRAM_BASE) + 16 + (register_number) * 2) = data;
+	}
+}
+uint16_t bkp_data_read(bkp_data_register_enum register_number) {
+	if ((register_number >= BKP_DATA_0) && (register_number <= BKP_DATA_1)) {
+		 return REG16((BKPSRAM_BASE) + 16 + (register_number) * 2);
+	}
+	return 0;
+}
+#endif
