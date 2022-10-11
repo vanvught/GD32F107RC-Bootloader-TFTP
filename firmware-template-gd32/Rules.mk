@@ -7,7 +7,7 @@ LD	 = $(PREFIX)ld
 AR	 = $(PREFIX)ar
 
 FAMILY?=gd32f10x
-BOARD?=BOARD_GD32F107R
+BOARD?=BOARD_GD32F107RC
 
 FAMILY:=$(shell echo $(FAMILY) | tr A-Z a-z)
 FAMILY_UC=$(shell echo $(FAMILY) | tr a-w A-W)

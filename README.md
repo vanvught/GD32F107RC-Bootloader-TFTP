@@ -1,4 +1,12 @@
+![GitHub](https://img.shields.io/github/license/vanvught/GD32F107RC-Bootloader-TFTP)
+[![C++ Standard](https://img.shields.io/badge/C%2B%2B-11-blue.svg)](https://img.shields.io/badge/C%2B%2B-11%-blue.svg)
+![GitHub issues](https://img.shields.io/github/issues-raw/vanvught/GD32F107RC-Bootloader-TFTP)
+![GitHub contributors](https://img.shields.io/github/contributors/vanvught/GD32F107RC-Bootloader-TFTP)
+![GitHub Sponsors](https://img.shields.io/github/sponsors/vanvught)
+![Main](https://github.com/vanvught/GD32F107RC-Bootloader-TFTP/actions/workflows/c-cpp.yml/badge.svg?branch=main)
+
 [PayPal.Me Donate](https://paypal.me/AvanVught?locale.x=nl_NL)
+
 # GD32F107RC Bootloader TFTP
 
 This bootloader will install your application by means of the TFTP protocol. There is no need to change your application code. 
@@ -7,15 +15,6 @@ Per default DHCP is used for obtaining the ip-address.
 The bootloader is active during reset of the board:
 
 * Or when the `KEY_BOOTLOADER_TFTP_GPIO_PINx` is pressed. Which is defined in file `lib-gd32/include/board/gd32f107r.h`. 
-	
-		#define KEY3_PINx						GPIO_PIN_11
-		#define KEY3_GPIOx						GPIOA
-		#define KEY3_RCU_GPIOx					RCU_GPIOA
-		
-		#define KEY_BOOTLOADER_TFTP_GPIO_PINx	KEY3_PINx
-		#define KEY_BOOTLOADER_TFTP_GPIOx		KEY3_GPIOx
-		#define KEY_BOOTLOADER_TFTP_RCU_GPIOx	KEY3_RCU_GPIOx
-
 * Or when `bkp_data_read(BKP_DATA_1) == 0xA5A5`. This is set in your application by means of human readable UDP messages. See for more information: [https://www.gd32-dmx.org/bootloader.html](https://www.gd32-dmx.org/bootloader.html). There is also a sample Java UI application available for working with the UDP messages: [https://github.com/vanvught/GD32F-Firmware-Update-UI](https://github.com/vanvught/GD32F-Firmware-Update-UI)
 
 Otherwise the bootloader will directly jump to your application. With the snippet: 
