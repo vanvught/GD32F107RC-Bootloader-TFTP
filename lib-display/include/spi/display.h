@@ -88,13 +88,9 @@ public:
 		Text(pText, nLength);
 	}
 
-	void Status(Display7SegmentMessage nValue) {
-		printf("Status: %u\n", static_cast<uint32_t>(nValue));
-	}
+	void Status(__attribute__((unused)) Display7SegmentMessage nValue) { }
 
-	void Status(uint8_t nValue, bool bHex) {
-		printf("Status: %u:%d\n", nValue, bHex);
-	}
+	void Status(__attribute__((unused)) uint8_t nValue, __attribute__((unused)) bool bHex) {}
 
 	void Text(const char *pData, uint32_t nLength) {
 		if (nLength > m_nCols) {

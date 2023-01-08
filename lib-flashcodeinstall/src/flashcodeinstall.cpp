@@ -64,7 +64,7 @@ bool FlashCodeInstall::WriteFirmware(const uint8_t *pBuffer, uint32_t nSize) {
 
 	flashcode::result nResult;
 
-	FlashCode::Erase(OFFSET_UIMAGE, nEraseSize, nResult);
+	while(!FlashCode::Erase(OFFSET_UIMAGE, nEraseSize, nResult));
 
 	if (flashcode::result::ERROR == nResult) {
 		puts("error: flash erase");
@@ -73,7 +73,7 @@ bool FlashCodeInstall::WriteFirmware(const uint8_t *pBuffer, uint32_t nSize) {
 
 	Display::Get()->TextStatus("Writing", Display7SegmentMessage::INFO_SPI_WRITING, CONSOLE_GREEN);
 
-	FlashCode::Write(OFFSET_UIMAGE, nSize, pBuffer, nResult);
+	while(!FlashCode::Write(OFFSET_UIMAGE, nSize, pBuffer, nResult));
 
 	if (flashcode::result::ERROR == nResult) {
 		puts("error: flash write");
