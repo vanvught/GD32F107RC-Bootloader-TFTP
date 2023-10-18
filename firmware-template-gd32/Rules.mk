@@ -9,15 +9,16 @@ AR	 = $(PREFIX)ar
 BOARD?=BOARD_GD32F107RC
 ENET_PHY?=DP83848
 FAMILY?=gd32f10x
+MCU?=gd32f107
 
 FAMILY:=$(shell echo $(FAMILY) | tr A-Z a-z)
 FAMILY_UC=$(shell echo $(FAMILY) | tr a-w A-W)
 
 $(info $$FAMILY [${FAMILY}])
 $(info $$FAMILY_UC [${FAMILY_UC}])
-
+ 
 # Output 
-TARGET=gd32f107.bin
+TARGET=$(MCU).bin
 LIST=$(FAMILY).list
 MAP=$(FAMILY).map
 BUILD=build_gd32/
@@ -34,7 +35,6 @@ LIBS+=c++ c gd32
 $(info [${LIBS}])
 	
 DEFINES:=$(addprefix -D,$(DEFINES))
-DEFINES+=-DCONFIG_STORE_USE_ROM
 
 include ../firmware-template-gd32/Includes.mk
 
@@ -118,7 +118,9 @@ lisdep: $(LIBDEP)
 $(LIBDEP):
 	$(MAKE) -f Makefile.GD32 $(MAKECMDGOALS) 'FAMILY=${FAMILY}' 'BOARD=${BOARD}' 'PHY_TYPE=${ENET_PHY}' 'MAKE_FLAGS=$(DEFINES)' -C $@ 
 
+#
 # Build bin
+#
 
 $(BUILD_DIRS) :
 	mkdir -p $(BUILD_DIRS)
@@ -129,9 +131,14 @@ $(BUILD)startup_$(FAMILY)_cl.o : $(FIRMWARE_DIR)/startup_$(FAMILY)_cl.S
 $(BUILD)main.elf: Makefile.GD32 $(LINKER) $(BUILD)startup_$(FAMILY)_cl.o $(OBJECTS) $(LIBDEP)
 	$(LD) $(BUILD)startup_$(FAMILY)_cl.o $(OBJECTS) -Map $(MAP) -T $(LINKER) $(LDOPS) -o $(BUILD)main.elf $(LIBGD32) $(LDLIBS) $(PLATFORM_LIBGCC) -lgcc 
 	$(PREFIX)objdump -D $(BUILD)main.elf | $(PREFIX)c++filt > $(LIST)
-	$(PREFIX)size -A -x $(BUILD)main.elf
+	$(PREFIX)size -A -x $(BUILD)main.elf > $(FAMILY).size
+	$(MAKE) -f Makefile.GD32 calculate_unused_ram SIZE_FILE=$(FAMILY).size LINKER_SCRIPT=$(LINKER)
 
 $(TARGET) : $(BUILD)main.elf 
 	$(PREFIX)objcopy $(BUILD)main.elf -O binary $(TARGET)	
 	
 $(foreach bdir,$(SRCDIR),$(eval $(call compile-objects,$(bdir))))
+
+.PHONY: calculate_unused_ram
+calculate_unused_ram: $(FAMILY).size $(LINKER)
+	@$(FIRMWARE_DIR)/calculate_unused_ram.sh $(FAMILY).size $(LINKER)

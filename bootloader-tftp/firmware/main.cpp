@@ -63,7 +63,10 @@ int main(void) {
     gpio_mode_set(KEY_BOOTLOADER_TFTP_GPIOx, GPIO_MODE_INPUT, GPIO_PUPD_PULLUP, KEY_BOOTLOADER_TFTP_GPIO_PINx);
 #endif
 
-    if ((bkp_data_read(BKP_DATA_1) != 0xA5A5) && (gpio_input_bit_get(KEY_BOOTLOADER_TFTP_GPIOx, KEY_BOOTLOADER_TFTP_GPIO_PINx))) {
+	const auto isNotRemote = (bkp_data_read(BKP_DATA_1) != 0xA5A5);
+	const auto isNotKey =  (gpio_input_bit_get(KEY_BOOTLOADER_TFTP_GPIOx, KEY_BOOTLOADER_TFTP_GPIO_PINx));
+
+	if (isNotRemote && isNotKey) {
     	// https://developer.arm.com/documentation/ka001423/1-0
     	//1. Disable interrupt response.
     	__disable_irq();
@@ -94,18 +97,15 @@ int main(void) {
     }
 
 	Hardware hw;
-	Network nw;
 	Display display(4);
-	FirmwareVersion fw(SOFTWARE_VERSION, __DATE__, __TIME__);
-
-	fw.Print("Bootloader TFTP Server");
-
-	FlashCodeInstall flashCodeInstall;
 	ConfigStore configStore;
-
 	StoreNetwork storeNetwork;
-	nw.SetNetworkStore(&storeNetwork);
-	nw.Init(&storeNetwork);
+	Network nw(&storeNetwork);
+	FirmwareVersion fw(SOFTWARE_VERSION, __DATE__, __TIME__);
+	FlashCodeInstall flashCodeInstall;
+
+	printf("Remote=%c, Key=%c\n", isNotRemote ? 'N' : 'Y', isNotKey ? 'N' : 'Y');
+	fw.Print("Bootloader TFTP Server");
 	nw.Print();
 
 	hw.SetMode(hardware::ledblink::Mode::OFF_ON);
@@ -121,6 +121,7 @@ int main(void) {
 
 	remoteConfig.SetEnableReboot(true);
 
+	network::display_ip();
 	display.Printf(3, "Bootloader TFTP Srvr");
 
 	hw.SetMode(hardware::ledblink::Mode::FAST);
