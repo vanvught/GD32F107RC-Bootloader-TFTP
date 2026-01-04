@@ -35,7 +35,7 @@ do
 		
 			for m in $MAKEFILE
 			do
-				make -f $m -j $NPROC clean
+				make -f $m -j $NPROC clean -j
 				make -f $m -j $NPROC ENET_PHY=$i
 				retVal=$?
 				

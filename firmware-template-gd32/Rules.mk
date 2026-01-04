@@ -21,13 +21,12 @@ FIRMWARE_DIR=./../firmware-template-gd32/
 
 DEFINES:=$(addprefix -D,$(DEFINES))
 
-include ../firmware-template-gd32/Board.mk
-include ../firmware-template-gd32/Mcu.mk
-include ../firmware-template/libs.mk
-include ../firmware-template-gd32/Includes.mk
-include ../firmware-template-gd32/Validate.mk
+include ../common/make/gd32/Board.mk
+include ../common/make/gd32/Mcu.mk
+include ../common/make/gd32/Includes.mk
+include ../common/make/gd32/Validate.mk
 
-LIBS+=gd32 clib
+LIBS+=network hal gd32 clib
 
 # The variable for the libraries include directory
 LIBINCDIRS:=$(addprefix -I../lib-,$(LIBS))
@@ -124,8 +123,8 @@ $(BUILD_DIRS) :
 $(BUILD)startup_$(LINE).o : $(FIRMWARE_DIR)/startup_$(LINE).S
 	$(AS) $(COPS) -D__ASSEMBLY__ -c $(FIRMWARE_DIR)/startup_$(LINE).S -o $(BUILD)startup_$(LINE).o
 
-$(BUILD)hardfault_handler.o : $(FIRMWARE_DIR)/hardfault_handler.c	
-	$(CC) $(COPS) -c $(FIRMWARE_DIR)/hardfault_handler.c -o $(BUILD)hardfault_handler.o
+$(BUILD)hardfault_handler.o : $(FIRMWARE_DIR)/hardfault_handler.cpp	
+	$(CPP) $(COPS) $(CPPOPS) -c $(FIRMWARE_DIR)/hardfault_handler.cpp -o $(BUILD)hardfault_handler.o
 
 $(BUILD)main.elf: Makefile.GD32 $(LINKER) $(BUILD)startup_$(LINE).o $(BUILD)hardfault_handler.o $(OBJECTS) $(LIBDEP)
 	$(LD) $(BUILD)startup_$(LINE).o $(BUILD)hardfault_handler.o $(OBJECTS) -Map $(MAP) -T $(LINKER) $(LDOPS) -o $(BUILD)main.elf $(LIBGD32) $(LDLIBS) $(PLATFORM_LIBGCC) -lgcc
