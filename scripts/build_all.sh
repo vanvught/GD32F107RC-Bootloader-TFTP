@@ -1,11 +1,4 @@
-#!/bin/bash
-NPROC=1
-
-if [ "$(uname)" == "Darwin" ]; then
-     NPROC=$(sysctl -a | grep machdep.cpu.core_count | cut -d ':' -f 2)     
-elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-     NPROC=$(nproc)
-fi
+#!/usr/bin/env bash
 
 cd ..
 
@@ -35,8 +28,8 @@ do
 		
 			for m in $MAKEFILE
 			do
-				make -f $m -j $NPROC clean -j
-				make -f $m -j $NPROC ENET_PHY=$i
+				make -f $m clean -j
+				make -f $m ENET_PHY=$i
 				retVal=$?
 				
 				if [ $retVal -ne 0 ]; then
