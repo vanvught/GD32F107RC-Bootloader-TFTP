@@ -2,7 +2,7 @@
  * @file main.cpp
  *
  */
-/* Copyright (C) 2022-2024 by Arjan van Vught mailto:info@gd32-dmx.org
+/* Copyright (C) 2022-2026 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@
 #include <cstdint>
 
 #include "hal.h"
-#include "gd32/hal_watchdog.h"
+#include "watchdog.h"
 #include "network.h"
 #include "display.h"
 #include "hal_statusled.h"
@@ -116,12 +116,12 @@ int main()
 
     display.Printf(3, "Bootloader TFTP Srvr");
 
-    hal::statusled::SetMode(hal::statusled::Mode::FAST);
-    hal::WatchdogInit();
+    hal::statusled::SetMode(hal::statusled::Mode::kFast);
+    watchdog::Init();
 
     while (1)
     {
-        hal::WatchdogFeed();
+        watchdog::Feed();
         network::Run();
         hal::Run();
     }
