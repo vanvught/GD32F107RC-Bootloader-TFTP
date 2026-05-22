@@ -1,8 +1,8 @@
 /**
- * @file console.h
+ * @file serialnumber.h
  *
  */
-/* Copyright (C) 2018-2025 by Arjan van Vught mailto:info@gd32-dmx.org
+/* Copyright (C) 2026 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,18 +22,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#ifndef SERIALNUMBER_H_
+#define SERIALNUMBER_H_
 
-#ifndef CONSOLE_H_
-#define CONSOLE_H_
+#include <cstdint>
 
-#if defined(CONSOLE_FB)
-#include "console/console_fb.h"
-#elif defined(CONSOLE_NULL)
-#include "console/console_null.h"
-#elif defined(CONSOLE_I2C)
-#include "console/console_i2c.h"
-#else
-#include "console/console_uart0.h"
-#endif
+inline constexpr uint32_t kSnSize = 4;
+void SerialNumber(uint8_t sn[kSnSize]);
 
-#endif  // CONSOLE_H_
+#endif // SERIALNUMBER_H_
