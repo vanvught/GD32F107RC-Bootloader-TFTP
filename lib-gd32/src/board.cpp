@@ -1,8 +1,8 @@
 /**
- * @file hal_panelled.h
+ * @file board.cpp
  *
  */
-/* Copyright (C) 2021-2025 by Arjan van Vught mailto:info@gd32-dmx.org
+/* Copyright (C) 2026 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,30 +23,41 @@
  * THE SOFTWARE.
  */
 
-#ifndef LINUX_HAL_PANELLED_H_
-#define LINUX_HAL_PANELLED_H_
+#include "gd32_board.h"
 
-#include <cstdint>
+namespace board {
+static constexpr float kCoreTemperatureMin = -40.0;
+static constexpr float kCoreTemperatureMax = +85.0;
+static constexpr const char kWebsite[] = "https://gd32-dmx.org";
 
-namespace hal::panelled
-{
-inline constexpr uint32_t ACTIVITY = 0;
-inline constexpr uint32_t ARTNET = 0;
-inline constexpr uint32_t DDP = 0;
-inline constexpr uint32_t SACN = 0;
-inline constexpr uint32_t LTC_IN = 0;
-inline constexpr uint32_t LTC_OUT = 0;
-inline constexpr uint32_t MIDI_IN = 0;
-inline constexpr uint32_t MIDI_OUT = 0;
-inline constexpr uint32_t OSC_IN = 0;
-inline constexpr uint32_t OSC_OUT = 0;
-inline constexpr uint32_t TCNET = 0;
-// DMX
-inline constexpr uint32_t PORT_A_RX = 0;
-inline constexpr uint32_t PORT_A_TX = 0;
+const char* Website() {
+    return kWebsite;
+}
 
-inline static void On([[maybe_unused]] uint32_t on) {}
-inline static void Off([[maybe_unused]] uint32_t off) {}
-} // namespace hal::panelled
+float CoreTemperatureMin() {
+    return kCoreTemperatureMin;
+}
+float CoreTemperatureMax() {
+    return kCoreTemperatureMax;
+}
 
-#endif  // LINUX_HAL_PANELLED_H_
+const char* BoardName(uint8_t& length) {
+    length = sizeof(GD32_BOARD_NAME) - 1U;
+    return GD32_BOARD_NAME;
+}
+
+const char* SocName(uint8_t& length) {
+    length = 4;
+    return "GD32";
+}
+
+const char* CpuName(uint8_t& length) {
+    length = sizeof(GD32_MCU_NAME) - 1U;
+    return GD32_MCU_NAME;
+}
+
+const char* SysName(uint8_t& length) {
+    length = 8;
+    return "Embedded";
+}
+} // namespace board
