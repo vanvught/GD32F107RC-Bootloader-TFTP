@@ -10,6 +10,7 @@ AR	 = $(PREFIX)ar
 
 BOARD?=BOARD_GD32F107RC
 ENET_PHY?=DP83848
+MCU=GD32F107RC
 
 TARGET=gd32f107.bin
 LIST=$(FAMILY).list
@@ -26,7 +27,7 @@ include ../common/make/gd32/Mcu.mk
 include ../common/make/gd32/Includes.mk
 include ../common/make/gd32/Validate.mk
 
-LIBS+=network hal gd32 clib
+LIBS+=network superloop hal gd32 clib
 
 # The variable for the libraries include directory
 LIBINCDIRS:=$(addprefix -I../lib-,$(LIBS))
