@@ -22,11 +22,12 @@ FIRMWARE_DIR=./../firmware-template-gd32/
 PROJECT=$(notdir $(patsubst %/,%,$(CURDIR)))
 $(info $$PROJECT [${PROJECT}])
 
-DEFINES:=$(addprefix -D,$(DEFINES))
+DEFINES:=$(addprefix -D,$(DEFINES)) -DCONFIG_NETWORK_MEMORY_BLOCKS=1
 
 include ../common/make/gd32/Board.mk
 include ../common/make/gd32/Mcu.mk
 include ../common/make/gd32/Includes.mk
+include ../common/make/Timestamp.mk
 include ../common/make/gd32/Validate.mk
 
 LIBS+=network superloop board gd32 clib
@@ -44,12 +45,6 @@ LDLIBS:=$(addprefix -l,$(LIBS))
 
 # The variables for the dependency check
 LIBDEP=$(addprefix ../lib-,$(LIBS))
-
-$(info $$BOARD [${BOARD}])
-$(info $$ENET_PHY [${ENET_PHY}])
-$(info $$DEFINES [${DEFINES}])
-$(info $$LIBS [${LIBS}])
-$(info $$LIBDEP [${LIBDEP}])
 
 COPS=-DGD32 -D$(FAMILY_UCA) -D$(LINE_UC) -D$(MCU) -D$(BOARD) -DPHY_TYPE=$(ENET_PHY)
 COPS+=$(strip $(DEFINES) $(MAKE_FLAGS) $(INCLUDES) $(LIBINCDIRS))
@@ -81,7 +76,7 @@ $(BUILD)$1/%.o: $1/%.cpp
 	$(CPP) $(COPS) $(CPPOPS) -c $$< -o $$@
 
 $(BUILD)$1/%.o: $1/%.c
-	$(CC) $(COPS) -c $$< -o $$@
+	$(CC) -MD -MP $(COPS) -c $$< -o $$@
 
 $(BUILD)$1/%.o: $1/%.S
 	$(CC) $(COPS) -D__ASSEMBLY__ -c $$< -o $$@
