@@ -45,12 +45,12 @@
 */.tracecompass
 
 # Build
-*/build_gd32/*
-*/lib_gd32/*
+build_gd32/
+lib_gd32/
 
 *.bin
 *.list
 *.map
 /.cache
+
 compile_commands.json
-/common/scripts/gd32/venv
